@@ -17,7 +17,7 @@ app.use(
 );
 
 app.use(compression());
-//app.use(cookieParser());
+app.use(cookieParser());
 app.use(bodyParser.json());
 
 // const server = http.createServer(app);
