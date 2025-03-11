@@ -34,9 +34,9 @@ mongoose
     console.log("Connected to MongoDB");
 
     // Start the server only after the database connection is established
-    app.use("/", router());
+    app.use("/api", router());
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running`);
     });
   })
   .catch((err: any) => {
