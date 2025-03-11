@@ -17,3 +17,7 @@ export default (): express.Router => {
   quotes(router);
   return router;
 };
+
+module.exports = () => {
+  return router;
+};

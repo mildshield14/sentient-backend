@@ -43,4 +43,5 @@ mongoose
     console.error("MongoDB Connection Error:", err);
   });
 
+module.exports = app;
 export default app;
