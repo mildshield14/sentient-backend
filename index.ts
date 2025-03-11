@@ -17,7 +17,7 @@ app.use(
 );
 
 app.use(compression());
-// app.use(cookieParser());
+//app.use(cookieParser());
 app.use(bodyParser.json());
 
 // const server = http.createServer(app);
@@ -45,14 +45,4 @@ connectDB();
 
 // module.exports.handler = serverless(app);
 // export default app;
-export const handler = serverless(app);
-import express from "express";
-import serverless from "serverless-http";
-
-const app = express();
-
-app.get("/", (req, res) => {
-    res.send("Hello, World!");
-});
-
 export const handler = serverless(app);
