@@ -22,7 +22,6 @@ const MONGODB_URL = `mongodb+srv://admin1234:${process.env.MONG0PWD}@sentient-ui
 
 mongoose
   .connect(MONGODB_URL, {
-    poolSize: 10, // Adjust based on your needs
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
