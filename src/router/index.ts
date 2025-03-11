@@ -18,6 +18,6 @@ export default (): express.Router => {
   return router;
 };
 
-module.exports = () => {
-  return router;
-};
+// module.exports = () => {
+//   return router;
+// };

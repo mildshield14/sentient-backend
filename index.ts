@@ -45,6 +45,6 @@ mongoose
     console.error("MongoDB Connection Error:", err);
   });
 
-module.exports = app;
+
 module.exports.handler = serverless(app);
-export default app;
+// export default app;
