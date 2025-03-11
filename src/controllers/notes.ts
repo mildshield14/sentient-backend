@@ -61,6 +61,12 @@ export const updateNote = async (
             return res.status(400).json({ error: "Note ID is required" });
         }
         const quote = await getNoteByID(id);
+
+
+        if (!quote) {
+            return res.status(404).json({ error: "Quote not found" });
+        }
+
         quote.id = id;
         await quote.save();
 

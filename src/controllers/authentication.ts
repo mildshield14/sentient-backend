@@ -27,6 +27,10 @@ export const register = async (req: express.Request, res: express.Response) => {
       },
     });
 
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
     return res.status(201).json({ user }).end();
   } catch (error) {
     console.log(error);
@@ -46,11 +50,12 @@ export const login = async (req: express.Request, res: express.Response) => {
       "+authentication.password +authentication.salt",
     );
 
-    if (!user) {
+    if (!user || !user.authentication || !user.authentication.salt) {
       return res.status(400).json({ error: "User not found" });
     }
 
-    const expectedHash = authentication(user.authentication.salt, password);
+    const expectedHash: any = authentication(user.authentication.salt, password);
+
     if (user.authentication.password.toString() !== expectedHash.toString()) {
       return res.status(403).json({ error: "Invalid password" });
     }
@@ -60,6 +65,10 @@ export const login = async (req: express.Request, res: express.Response) => {
     //   user._id.toString(),
     // );
     await user.save();
+
+    if (!user.authentication.sessionToken) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
     res.cookie("auth_hereee", user.authentication.sessionToken, {
       domain: "localhost",

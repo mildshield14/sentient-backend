@@ -41,6 +41,11 @@ export const updateUser = async (
       return res.status(400).json({ error: "User ID is required" });
     }
     const user = await getUserByID(id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     user.username = username;
     await user.save();
 
