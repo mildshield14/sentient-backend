@@ -32,5 +32,6 @@ mongoose
   .catch((err: any) => {
     console.error("MongoDB Connection Error:", err);
   });
+
 // Serverless handler
-export const handler = serverless(app);
+export default serverless(app);
