@@ -20,7 +20,7 @@ exports.default = () => {
     (0, quotes_1.default)(router);
     return router;
 };
-module.exports = () => {
-    return router;
-};
+// module.exports = () => {
+//   return router;
+// };
 //# sourceMappingURL=index.js.map

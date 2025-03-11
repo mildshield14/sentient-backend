@@ -30,21 +30,19 @@ const PORT = 8080;
 
 const MONGODB_URL = `mongodb+srv://admin1234:${process.env.MONG0PWD}@sentient-ui.lknck.mongodb.net/sentient?retryWrites=true&w=majority&appName=sentient-ui`;
 
-mongoose
-  .connect(MONGODB_URL, {})
-  .then(() => {
-    console.log("Connected to MongoDB");
+const connectDB = async () => {
+    try {
+        await mongoose.connect(MONGODB_URL);
+        console.log("Connected to MongoDB");
+    } catch (err) {
+        console.error("MongoDB Connection Error:", err);
+        process.exit(1); // Exit if DB connection fails
+    }
+};
 
-    // Start the server only after the database connection is established
-    app.use("/api", router());
-    app.listen(PORT, () => {
-      console.log(`Server running`);
-    });
-  })
-  .catch((err: any) => {
-    console.error("MongoDB Connection Error:", err);
-  });
+// Connect to database when Lambda starts
+connectDB();
 
-
-module.exports.handler = serverless(app);
+// module.exports.handler = serverless(app);
 // export default app;
+export const handler = serverless(app);
