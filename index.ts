@@ -21,16 +21,13 @@ app.use("/api", router());
 const MONGODB_URL = `mongodb+srv://admin1234:${process.env.MONG0PWD}@sentient-ui.lknck.mongodb.net/sentient?retryWrites=true&w=majority&appName=sentient-ui`;
 
 mongoose
-    .connect(MONGODB_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((err) => {
-        console.error("MongoDB Connection Error:", err);
-    });
+  .connect(MONGODB_URL, {})
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err: any) => {
+    console.error("MongoDB Connection Error:", err);
+  });
 
 // // Serverless handler
 // export const handler = serverless(app);
