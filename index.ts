@@ -7,6 +7,8 @@ import mongoose from "mongoose";
 import router from "./src/router";
 import 'dotenv/config';
 
+const serverless = require('serverless-http');
+
 const app = express();
 app.use(
   cors({
@@ -44,4 +46,5 @@ mongoose
   });
 
 module.exports = app;
+module.exports.handler = serverless(app);
 export default app;
