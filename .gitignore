@@ -1,3 +1,10 @@
 /node_modules/
 /lib/
 .bsb.lock
+
+.env
+
+/dist/
+
+/.idea/
+.vercel
