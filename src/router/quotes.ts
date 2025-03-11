@@ -2,7 +2,7 @@ import express from "express";
 import axios from "axios";
 
 export default (router: express.Router) => {
-    router.get("/quote", async (_req, res) => {
+    router.get("/quotes", async (_req, res) => {
       // const mood = req.query.mood || "happy";
 
       const options = {
