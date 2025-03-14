@@ -71,7 +71,7 @@ export const login = async (req: express.Request, res: express.Response) => {
     }
 
     res.cookie("auth_hereee", user.authentication.sessionToken, {
-      domain: "localhost",
+      domain: "https://sentient-backend-aphg-pied.vercel.app/api",
       path: "/",
     });
 

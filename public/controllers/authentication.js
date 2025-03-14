@@ -69,7 +69,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(404).json({ error: "User not found" });
         }
         res.cookie("auth_hereee", user.authentication.sessionToken, {
-            domain: "localhost",
+            domain: "https://sentient-backend-aphg-pied.vercel.app/api",
             path: "/",
         });
         return res.status(200).json({ user }).end();
