@@ -8,6 +8,8 @@ import 'dotenv/config';
 
 const app = express();
 
+app.use(bodyParser.json());
+
 // Allow requests from Netlify frontend
 app.use(cors({
     origin: [
@@ -22,7 +24,7 @@ app.use(cors({
 
 // Middleware
 app.use(compression());
-app.use(bodyParser.json());
+
 
 // Initialize routes
 app.use("/api", router());
