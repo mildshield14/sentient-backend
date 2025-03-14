@@ -9,6 +9,13 @@ import serverless from 'serverless-http';
 
 const app = express();
 
+// Allow requests from Netlify frontend
+app.use(cors({
+    origin: "https://your-netlify-app.netlify.app", // Replace with your actual frontend URL
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type,Authorization"
+}));
+
 // Middleware
 app.use(cors({ credentials: true }));
 app.use(compression());
