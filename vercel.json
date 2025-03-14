@@ -9,10 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "index.ts",
-      "headers": {
-        "Access-Control-Allow-Origin": "http://localhost:5173, https://sentient-app.netlify.app"
-      }
+      "dest": "index.ts"
     }
   ]
 }
