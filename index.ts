@@ -11,8 +11,10 @@ const app = express();
 
 // Allow requests from Netlify frontend
 app.use(cors({
-    origin:
-        "https://sentient-app.netlify.app",
+    origin: [
+        "http://localhost:5173",
+        "https://sentient-app.netlify.app"
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -49,5 +51,4 @@ mongoose
 // export const handler = serverless(app);
 // Serverless handler
 // export default serverless(app);
-// module.exports = app
-export default app;
+module.exports = app
