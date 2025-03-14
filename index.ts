@@ -51,4 +51,5 @@ mongoose
 // export const handler = serverless(app);
 // Serverless handler
 // export default serverless(app);
-module.exports = app
+// module.exports = app
+export default app;
