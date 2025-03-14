@@ -5,7 +5,6 @@ import cors from "cors";
 import mongoose from "mongoose";
 import router from "./src/router";
 import 'dotenv/config';
-import serverless from 'serverless-http';
 
 const app = express();
 
@@ -48,8 +47,4 @@ mongoose
     console.error("MongoDB Connection Error:", err);
   });
 
-// // Serverless handler
-// export const handler = serverless(app);
-// Serverless handler
-// export default serverless(app);
 module.exports = app
