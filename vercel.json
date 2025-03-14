@@ -6,11 +6,6 @@
       "use": "@vercel/node"
     }
   ],
-  "functions": {
-    "api/*": {
-      "timeout": 30
-    }
-  },
   "routes": [
     {
       "src": "/(.*)",
