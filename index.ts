@@ -11,13 +11,13 @@ const app = express();
 
 // Allow requests from Netlify frontend
 app.use(cors({
-    origin: "https://your-netlify-app.netlify.app", // Replace with your actual frontend URL
+    origin: "https://sentient-app.netlify.app/api",
     methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization"
+    allowedHeaders: "Content-Type,Authorization",
+    credentials: true
 }));
 
 // Middleware
-app.use(cors({ credentials: true }));
 app.use(compression());
 app.use(bodyParser.json());
 
