@@ -11,10 +11,8 @@ const app = express();
 
 // Allow requests from Netlify frontend
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://sentient-app.netlify.app"
-    ],
+    origin:
+        "https://sentient-app.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
