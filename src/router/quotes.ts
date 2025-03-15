@@ -22,10 +22,10 @@ export default (router: express.Router) => {
         const response = await axios.request(options);
         console.log(response.data);
 
-        const filteredData = response.data.map((item: any) => ({
-         content: item.content,
-          originator: item.originator,
-        }));
+        const filteredData = {
+          content: response.data.content,
+          originator: response.data.originator,
+        };
 
         res.status(200).json(filteredData);
       } catch (error) {
