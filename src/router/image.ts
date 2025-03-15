@@ -26,18 +26,13 @@ export default (router: express.Router) => {
 
         const filteredData = response.data.results.map((item: any) => {
           let description = item.description || item.alt_description || "No description available";
-          if (item.user && item.user.name && item.user.location) {
-            description += ` by ${item.user.name} from ${item.user.location}`;
-          } else if (item.user && item.user.name) {
-            description += ` by ${item.user.name}`;
-          } else if (item.user && item.user.location) {
-            description += ` from ${item.user.location}`;
-          }
 
           return {
             id: item.id,
             description: description,
             urls: item.urls.raw,
+            author: item.user ? item.user.name :null,
+            location: item.user ? item.user.location : null,
           };
         });
 
