@@ -15,7 +15,7 @@ export default (router: express.Router) => {
         params: {
           client_id: process.env.IMAGE_API_KEY,
           query: "scenery",
-          page: Math.floor(Math.random() * 500) + 1,
+          page: Math.floor(Math.random() * 200) + 1,
           per_page: "1",
         },
       };
