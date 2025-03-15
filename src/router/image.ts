@@ -23,7 +23,15 @@ export default (router: express.Router) => {
       try {
         const response = await axios.request(options);
         console.log(response.data);
-        res.status(200).json(response.data);
+
+        const filteredData = response.data.results.map((item: any) => ({
+          id: item.id,
+          description: item.description,
+          urls: item.urls,
+        }));
+
+        res.status(200).json(filteredData);
+
       } catch (error) {
         console.error(error);
         res.sendStatus(400);
