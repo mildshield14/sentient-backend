@@ -14,8 +14,8 @@ export default (router: express.Router) => {
         url: "https://api.unsplash.com/search/photos/",
         params: {
           client_id: process.env.IMAGE_API_KEY,
-          query: "happy",
-          page: "1",
+          query: "scenery",
+          page: Math.floor(Math.random() * 500) + 1,
           per_page: "1",
         },
       };
