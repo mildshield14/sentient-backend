@@ -13,12 +13,10 @@ export default (router: express.Router) => {
         method: "GET",
         url: "https://api.unsplash.com/search/photos/",
         params: {
+          client_id: process.env.IMAGE_API_KEY,
           query: "happy",
           page: "1",
           per_page: "1",
-        },
-        headers: {
-          "Client-ID": process.env.IMAGE_API_KEY,
         },
       };
 
