@@ -4,7 +4,11 @@ import axios from "axios";
 export default (router: express.Router) => {
     router.get("/image", async (_req, res) => {
       // const mood = req.query.mood || "happy";
+      const apiKey = process.env.IMAGE_API_KEY;
 
+      if (!apiKey) {
+        return res.status(500).json({ error: "API key is missing" });
+      }
       const options = {
         method: "GET",
         url: "https://api.unsplash.com/search/photos/",
