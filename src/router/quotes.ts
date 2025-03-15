@@ -24,7 +24,7 @@ export default (router: express.Router) => {
 
         const filteredData = {
           content: response.data.content,
-          originator: response.data.originator,
+          author: response.data.originator.name,
         };
 
         res.status(200).json(filteredData);
