@@ -27,7 +27,7 @@ export default (router: express.Router) => {
         const filteredData = response.data.results.map((item: any) => ({
           id: item.id,
           description: item.description,
-          urls: item.urls,
+          urls: item.urls.raw,
         }));
 
         res.status(200).json(filteredData);
