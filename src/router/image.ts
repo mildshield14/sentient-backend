@@ -24,11 +24,22 @@ export default (router: express.Router) => {
         const response = await axios.request(options);
         console.log(response.data);
 
-        const filteredData = response.data.results.map((item: any) => ({
-          id: item.id,
-          description: item.description,
-          urls: item.urls.raw,
-        }));
+        const filteredData = response.data.results.map((item: any) => {
+          let description = item.description || item.alt_description || "No description available";
+          if (item.user && item.user.name && item.user.location) {
+            description += ` by ${item.user.name} from ${item.user.location}`;
+          } else if (item.user && item.user.name) {
+            description += ` by ${item.user.name}`;
+          } else if (item.user && item.user.location) {
+            description += ` from ${item.user.location}`;
+          }
+
+          return {
+            id: item.id,
+            description: description,
+            urls: item.urls.raw,
+          };
+        });
 
         res.status(200).json(filteredData);
 
