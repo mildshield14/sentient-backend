@@ -1,7 +1,7 @@
 import express from "express";
 import {deleteUser, getAllUsers, updateUser} from "../controllers/users";
 import {isAuthenticated, isOwner} from "../middlewares";
-import {getUserByID, updateUserByID} from "../db/users.ts";
+import {getUserByID, updateUserByID} from "../db/users";
 
 export default (router:express.Router) => {
     router.get('/users', isAuthenticated, getAllUsers);
@@ -16,6 +16,7 @@ export default (router:express.Router) => {
 
         try {
             const updatedUser = await updateUserByID(userId, { photo });
+            // @ts-ignore
             if (!updatedUser) {
                 return res.status(404).json({ error: "User not found" });
             }

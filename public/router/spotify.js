@@ -7,7 +7,7 @@ const spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
 const spotifyApi = new spotify_web_api_node_1.default({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: 'http://localhost:5173/callback',
+    redirectUri: 'https://sentient-backend-aphg-pied.vercel.app/api/callback',
 });
 exports.default = (router) => {
     router.post('/spotifylogin', (req, res) => {

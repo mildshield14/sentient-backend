@@ -10,6 +10,7 @@ const spotify_1 = __importDefault(require("./spotify"));
 const openweather_1 = __importDefault(require("./openweather"));
 const notes_1 = __importDefault(require("./notes"));
 const quotes_1 = __importDefault(require("./quotes"));
+const image_1 = __importDefault(require("./image"));
 const router = express_1.default.Router();
 exports.default = () => {
     (0, authentication_1.default)(router);
@@ -18,6 +19,7 @@ exports.default = () => {
     (0, openweather_1.default)(router);
     (0, notes_1.default)(router);
     (0, quotes_1.default)(router);
+    (0, image_1.default)(router);
     return router;
 };
 // module.exports = () => {

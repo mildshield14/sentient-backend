@@ -47,36 +47,29 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log("Login request body:", req.body); // <-- LOG THIS
         const { email, password } = req.body;
         if (!email || !password) {
+            console.log("Missing fields");
             return res.status(400).json({ error: "Email and password are required" });
         }
         const user = yield (0, users_1.getUserByEmail)(email, "+authentication.password +authentication.salt");
+        console.log("Found user:", user);
         if (!user || !user.authentication || !user.authentication.salt) {
+            console.log("User not found or missing auth");
             return res.status(400).json({ error: "User not found" });
         }
+        // Compare hashed password
         const expectedHash = (0, helpers_1.authentication)(user.authentication.salt, password);
         if (user.authentication.password.toString() !== expectedHash.toString()) {
+            console.log("Invalid password");
             return res.status(403).json({ error: "Invalid password" });
         }
-        // const salt = random();
-        // user.authentication.sessionToken = authentication(
-        //   salt,
-        //   user._id.toString(),
-        // );
-        yield user.save();
-        if (!user.authentication.sessionToken) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        res.cookie("auth_hereee", user.authentication.sessionToken, {
-            domain: "https://sentient-backend-aphg-pied.vercel.app/api",
-            path: "/",
-        });
-        return res.status(200).json({ user }).end();
+        console.log("Login success!");
+        res.json({ user });
     }
     catch (error) {
-        console.log(error);
-        // @ts-ignore
+        console.error("Login error:", error);
         return res.status(400).json({ error: error.message });
     }
 });

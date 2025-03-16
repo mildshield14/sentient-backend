@@ -37,6 +37,7 @@ const mongoose = __importStar(require("mongoose"));
 const userScheme = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
+    photo: { type: String },
     authentication: {
         password: { type: String, required: true, select: false },
         salt: { type: String, select: false },

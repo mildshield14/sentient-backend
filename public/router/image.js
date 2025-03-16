@@ -14,27 +14,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 exports.default = (router) => {
-    router.get("/quote", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get("/image", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // const mood = req.query.mood || "happy";
+        const apiKey = process.env.IMAGE_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: "API key is missing" });
+        }
         const options = {
             method: "GET",
-            url: "https://quotes15.p.rapidapi.com/quotes/random/",
+            url: "https://api.unsplash.com/search/photos/",
             params: {
-                language_code: "en",
-            },
-            headers: {
-                "x-rapidapi-key": process.env.RAPID_API_QUOTE_KEY,
-                "x-rapidapi-host": "quotes15.p.rapidapi.com",
+                client_id: process.env.IMAGE_API_KEY,
+                query: "scenery",
+                page: Math.floor(Math.random() * 200) + 1,
+                per_page: "1",
             },
         };
-        console.log(process.env.RAPID_API_QUOTE_KEY);
         try {
             const response = yield axios_1.default.request(options);
             console.log(response.data);
-            const filteredData = {
-                content: response.data.content,
-                author: response.data.originator.name,
-            };
+            const filteredData = response.data.results.map((item) => {
+                let description = item.description || item.alt_description || "No description available";
+                return {
+                    id: item.id,
+                    description: description,
+                    urls: item.urls.raw,
+                    author: item.user ? item.user.name : null,
+                    location: item.user ? item.user.location : null,
+                };
+            });
             res.status(200).json(filteredData);
         }
         catch (error) {
@@ -43,4 +51,4 @@ exports.default = (router) => {
         }
     }));
 };
-//# sourceMappingURL=quotes.js.map
+//# sourceMappingURL=image.js.map
