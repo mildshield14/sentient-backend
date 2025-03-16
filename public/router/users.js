@@ -13,7 +13,7 @@ const users_1 = require("../controllers/users");
 const middlewares_1 = require("../middlewares");
 const users_2 = require("../db/users");
 exports.default = (router) => {
-    router.get('/users', middlewares_1.isAuthenticated, users_1.getAllUsers);
+    router.get("/users", middlewares_1.isAuthenticated, users_1.getAllUsers);
     router.post("/user/:id/photo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const userId = req.params.id;
         const { photo } = req.body;
@@ -22,15 +22,14 @@ exports.default = (router) => {
         }
         try {
             const updatedUser = yield (0, users_2.updateUserByID)(userId, { photo });
-            // @ts-ignore
             if (!updatedUser) {
                 return res.status(404).json({ error: "User not found" });
             }
-            res.status(200).json(updatedUser);
+            return res.status(200).json(updatedUser);
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ error: "Internal server error" });
+            return res.status(500).json({ error: "Internal server error" });
         }
     }));
     router.get("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,14 +39,14 @@ exports.default = (router) => {
             if (!user) {
                 return res.status(404).json({ error: "User not found" });
             }
-            res.status(200).json(user);
+            return res.status(200).json(user);
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ error: "Internal server error" });
+            return res.status(500).json({ error: "Internal server error" });
         }
     }));
-    router.delete('/users/:id', middlewares_1.isOwner, middlewares_1.isAuthenticated, users_1.deleteUser);
-    router.patch('/users/:id', middlewares_1.isOwner, middlewares_1.isAuthenticated, users_1.updateUser);
+    router.delete("/users/:id", middlewares_1.isOwner, middlewares_1.isAuthenticated, users_1.deleteUser);
+    router.patch("/users/:id", middlewares_1.isOwner, middlewares_1.isAuthenticated, users_1.updateUser);
 };
 //# sourceMappingURL=users.js.map

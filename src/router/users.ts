@@ -1,10 +1,10 @@
 import express from "express";
-import {deleteUser, getAllUsers, updateUser} from "../controllers/users";
-import {isAuthenticated, isOwner} from "../middlewares";
-import {getUserByID, updateUserByID} from "../db/users";
+import { deleteUser, getAllUsers, updateUser } from "../controllers/users";
+import { isAuthenticated, isOwner } from "../middlewares";
+import { getUserByID, updateUserByID } from "../db/users";
 
-export default (router:express.Router) => {
-    router.get('/users', isAuthenticated, getAllUsers);
+export default (router: express.Router) => {
+    router.get("/users", isAuthenticated, getAllUsers);
 
     router.post("/user/:id/photo", async (req, res) => {
         const userId = req.params.id;
@@ -16,14 +16,13 @@ export default (router:express.Router) => {
 
         try {
             const updatedUser = await updateUserByID(userId, { photo });
-            // @ts-ignore
             if (!updatedUser) {
                 return res.status(404).json({ error: "User not found" });
             }
-            res.status(200).json(updatedUser);
+            return res.status(200).json(updatedUser);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: "Internal server error" });
+            return res.status(500).json({ error: "Internal server error" });
         }
     });
 
@@ -35,15 +34,13 @@ export default (router:express.Router) => {
             if (!user) {
                 return res.status(404).json({ error: "User not found" });
             }
-            res.status(200).json(user);
+            return res.status(200).json(user);
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: "Internal server error" });
+            return res.status(500).json({ error: "Internal server error" });
         }
     });
 
-    router.delete('/users/:id', isOwner, isAuthenticated, deleteUser);
-    router.patch('/users/:id', isOwner, isAuthenticated, updateUser);
-}
-
-
+    router.delete("/users/:id", isOwner, isAuthenticated, deleteUser);
+    router.patch("/users/:id", isOwner, isAuthenticated, updateUser);
+};
