@@ -30,7 +30,7 @@ export const getUserByEmail = async (email: string, selectFields?: string) => {
 export const getUserBySessionToken = (sessionToken: String) =>
   UserModel.findOne({ "authentication.sessionToken": sessionToken });
 
-export const getUserByID = (id: String) => UserModel.findOne({ _id: id });
+export const getUserByID = (id: String) => UserModel.findOne({ _id: new ObjectId(id) });
 
 export const createUser = (values: Record<string, any>) =>
   new UserModel(values)
