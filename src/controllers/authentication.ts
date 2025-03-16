@@ -69,6 +69,7 @@ export const login = async (req: express.Request, res: express.Response) => {
     res.json({ user });
   } catch (error) {
     console.error("Login error:", error);
+    // @ts-ignore
     return res.status(400).json({ error: error.message });
   }
 };

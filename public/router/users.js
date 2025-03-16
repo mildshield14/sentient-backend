@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = require("../controllers/users");
 const middlewares_1 = require("../middlewares");
-const users_ts_1 = require("../db/users.ts");
+const users_2 = require("../db/users");
 exports.default = (router) => {
     router.get('/users', middlewares_1.isAuthenticated, users_1.getAllUsers);
     router.post("/user/:id/photo", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -21,7 +21,8 @@ exports.default = (router) => {
             return res.status(400).json({ error: "Photo URL is required" });
         }
         try {
-            const updatedUser = yield (0, users_ts_1.updateUserByID)(userId, { photo });
+            const updatedUser = yield (0, users_2.updateUserByID)(userId, { photo });
+            // @ts-ignore
             if (!updatedUser) {
                 return res.status(404).json({ error: "User not found" });
             }
@@ -35,7 +36,7 @@ exports.default = (router) => {
     router.get("/user/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const userId = req.params.id;
         try {
-            const user = yield (0, users_ts_1.getUserByID)(userId);
+            const user = yield (0, users_2.getUserByID)(userId);
             if (!user) {
                 return res.status(404).json({ error: "User not found" });
             }
