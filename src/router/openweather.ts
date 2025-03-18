@@ -57,7 +57,7 @@ const cleanWeatherData = (data: any, location: { city: string, principalSubdivis
         current: {
             temperature: Math.round(data.weatherData.current_weather.temperature),
             weatherCode: data.weatherData.current_weather.weathercode,
-            feelsLike: data.feelLikeData.current.apparent_temperature
+            feelsLike: Math.round(data.feelLikeData.current.apparent_temperature)
         },
         hourly: latestHours,
     };
