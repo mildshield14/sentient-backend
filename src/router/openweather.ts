@@ -7,10 +7,9 @@ export default (router: express.Router) => {
     console.log("Received weather code:", code);
 
     const { lat = 45.5, lon = 73.57 } = req.query;
-
     axios
       .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.OPENWEATHER_API_KEY}`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m&hourly=temperature_2m`,
       )
       .then((data: { data: any }) => {
         res.json(data.data);
