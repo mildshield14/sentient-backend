@@ -17,39 +17,58 @@ const fetchWeatherData = async (lat: number, lon: number) => {
 };
 
 const fetchLocationName = async (lat: number, lon: number) => {
-  const response = await axios.get(
-    `https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}&api-key=${process.env.MAPS_API_KEY}`,
-  );
-  return response.data.address;
+    const response = await axios.get(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`,
+    );
+    return {
+        city: response.data.city || response.data.locality || response.data.principalSubdivision,
+        principalSubdivisionCode: response.data.principalSubdivisionCode,
+    };
 };
 
-const cleanWeatherData = (data: any, locationName: string) => {
-  const latestHours = data.hourly.time
-    .slice(-5)
-    .map((time: string, index: number) => ({
-      time: new Date(time).toLocaleTimeString("en-US", {
-        hour: "numeric",
-        hour12: true,
-      }),
-      temperature: Math.round(data.hourly.temperature_2m[index]),
-      weatherCode: data.hourly.weather_code[index],
-    }));
+const cleanWeatherData = (data: any, location: { city: string, principalSubdivisionCode: string }) => {
+    const currentTime = new Date(data.current_weather.time).getHours();
+    const latestHours = data.hourly.time
+        .map((time: string, index: number) => ({
+            time: new Date(time).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                hour12: true,
+            }),
+            temperature: Math.round(data.hourly.temperature_2m[index]),
+            weatherCode: data.hourly.weather_code[index],
+        }))
+        .filter((hour: any) => new Date(hour.time).getHours() > currentTime)
+        .slice(0, 5);
 
-  return {
-    location: locationName,
-    current: {
-      temperature: Math.round(data.current_weather.temperature),
-      // feels_like: Math.round(data.current_weather.temperature),
-      weatherCode: data.current_weather.weather_code,
-    },
-    hourly: latestHours,
-  };
+    return {
+        location: location.city,
+        principalSubdivisionCode: location.principalSubdivisionCode,
+        current: {
+            temperature: Math.round(data.current_weather.temperature),
+            weatherCode: data.current_weather.weather_code,
+        },
+        hourly: latestHours,
+    };
 };
 
 export default (router: express.Router) => {
   router.get("/weather", async (req, res) => {
     const lat = parseFloat(req.query.lat as string) || 45.5;
-    const lon = parseFloat(req.query.lon as string) || 73.57;
+    const lon = parseFloat(req.query.lon as string) || 73.57;import axios from "axios";
+
+    const fetchWeatherData = async () => {
+      try {
+        const response = await axios.get("/api/weather", {
+          params: { lat: 45.5, lon: 73.57 },
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      }
+    };
+
+    // Example usage
+    fetchWeatherData();
 
     const now = Date.now();
     if (!cache.data || now - cache.timestamp > 3600000) {
