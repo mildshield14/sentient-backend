@@ -5,15 +5,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const cache = {
-  data: null,
-  timestamp: 0,
+    data: null,
+    timestamp: 0,
 };
 
 const fetchWeatherData = async (lat: number, lon: number) => {
-  const response = await axios.get(
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,weather_code`,
-  );
-  return response.data;
+    const response = await axios.get(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,weather_code`,
+    );
+    return response.data;
 };
 
 const fetchLocationName = async (lat: number, lon: number) => {
@@ -52,39 +52,23 @@ const cleanWeatherData = (data: any, location: { city: string, principalSubdivis
 };
 
 export default (router: express.Router) => {
-  router.get("/weather", async (req, res) => {
-    const lat = parseFloat(req.query.lat as string) || 45.5;
-    const lon = parseFloat(req.query.lon as string) || 73.57;import axios from "axios";
+    router.get("/weather", async (req, res) => {
+        const lat = parseFloat(req.query.lat as string) || 45.5;
+        const lon = parseFloat(req.query.lon as string) || -73.57;
 
-    const fetchWeatherData = async () => {
-      try {
-        const response = await axios.get("/api/weather", {
-          params: { lat: 45.5, lon: 73.57 },
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
-      }
-    };
+        const now = Date.now();
+        if (!cache.data || now - cache.timestamp > 3600000) {
+            try {
+                const weatherData = await fetchWeatherData(lat, lon);
+                const location = await fetchLocationName(lat, lon);
+                cache.data = cleanWeatherData(weatherData, location);
+                cache.timestamp = now;
+            } catch (err) {
+                console.error("Error fetching weather data:", err);
+                return res.status(500).json({ error: "Failed to fetch weather data" });
+            }
+        }
 
-    // Example usage
-    fetchWeatherData();
-
-    const now = Date.now();
-    if (!cache.data || now - cache.timestamp > 3600000) {
-      try {
-        const weatherData = await fetchWeatherData(lat, lon);
-        const locationName = await fetchLocationName(lat, lon);
-        cache.data = cleanWeatherData(weatherData, locationName);
-        // @ts-ignore
-        // cache.data = {weatherData, locationName};
-        cache.timestamp = now;
-      } catch (err) {
-        console.error("Error fetching weather data:", err);
-        return res.status(500).json({ error: "Failed to fetch weather data" });
-      }
-    }
-
-    res.status(200).json(cache.data);
-  });
+        res.status(200).json(cache.data);
+    });
 };
