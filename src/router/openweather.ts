@@ -37,7 +37,7 @@ const cleanWeatherData = (data: any, location: { city: string, principalSubdivis
             temperature: Math.round(data.hourly.temperature_2m[index]),
             weatherCode: data.hourly.weather_code[index],
         }))
-        .filter((hour: any) => new Date(hour.time).getHours() > currentTime)
+        // .filter((hour: any) => new Date(hour.time).getHours() > currentTime)
         .slice(0, 5);
 
     return {
