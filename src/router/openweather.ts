@@ -11,7 +11,7 @@ const cache = {
 
 const fetchWeatherData = async (lat: number, lon: number) => {
     const response = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,weather_code`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&current=apparent_temperature&hourly=temperature_2m,weather_code`,
     );
     return response.data;
 };
