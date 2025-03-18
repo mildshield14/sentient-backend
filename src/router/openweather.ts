@@ -20,7 +20,7 @@ const fetchLocationName = async (lat: number, lon: number) => {
     const response = await axios.get(
         `https://geocode.maps.co/reverse?lat=${lat}&lon=${lon}&api-key=${process.env.MAPS_API_KEY}`
     );
-    return response.data.address.city;
+    return response.data.address;
 };
 
 const cleanWeatherData = (data: any, locationName: string) => {
