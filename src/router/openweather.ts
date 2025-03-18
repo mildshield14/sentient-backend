@@ -10,15 +10,23 @@ const cache = {
 };
 
 const fetchWeatherData = async (lat: number, lon: number) => {
-    const response = await axios.get(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,weather_code&current=apparent_temperature`,
+    const weatherResponse = await axios.get(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,weather_code`
     );
-    return response.data;
+
+    const feelLikeResponse = await axios.get(
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=apparent_temperature`
+    );
+
+    return {
+        weatherData: weatherResponse.data,
+        feelLikeData: feelLikeResponse.data
+    };
 };
 
 const fetchLocationName = async (lat: number, lon: number) => {
     const response = await axios.get(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`,
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
     );
     return {
         city: response.data.city || response.data.locality || response.data.principalSubdivision,
@@ -27,30 +35,29 @@ const fetchLocationName = async (lat: number, lon: number) => {
 };
 
 const cleanWeatherData = (data: any, location: { city: string, principalSubdivisionCode: string }) => {
-    const currentTime = new Date(data.current_weather.time).getHours();
-    const latestHours = data.hourly.time
+    const currentTime = new Date(data.weatherData.current_weather.time).getHours();
+    const latestHours = data.weatherData.hourly.time
         .map((time: string, index: number) => ({
             time: new Date(time).toLocaleTimeString("en-US", {
                 hour: "numeric",
                 hour12: true,
             }),
-            temperature: Math.round(data.hourly.temperature_2m[index]),
-            weatherCode: data.hourly.weather_code[index],
+            temperature: Math.round(data.weatherData.hourly.temperature_2m[index]),
+            weatherCode: data.weatherData.hourly.weather_code[index],
         }))
-        // .filter((hour: any) => new Date(hour.time).getHours() > currentTime)
         .slice(0, 5);
-    
+
     const country = location.principalSubdivisionCode.split("-")[0];
     const state = location.principalSubdivisionCode.split("-")[1];
 
     return {
         location: location.city,
-       country: country,
+        country: country,
         state: state,
         current: {
-            temperature: Math.round(data.current_weather.temperature),
-            weatherCode: data.current_weather.weathercode,
-            feelsLike: data.current.apparent_temperature
+            temperature: Math.round(data.weatherData.current_weather.temperature),
+            weatherCode: data.weatherData.current_weather.weathercode,
+            feelsLike: data.feelLikeData.current.apparent_temperature
         },
         hourly: latestHours,
     };
