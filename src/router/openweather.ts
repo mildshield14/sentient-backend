@@ -2,7 +2,8 @@ import express from "express";
 import axios from "axios";
 
 export default (router:express.Router) => {
-    router.post("/weather", (req, res) => {
+
+    router.get("/weather", (req, res) => {
     const code = req.body.code;
     console.log("Received weather code:", code);
 

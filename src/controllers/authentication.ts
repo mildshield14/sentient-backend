@@ -16,6 +16,10 @@ export const register = async (req: express.Request, res: express.Response) => {
       return res.status(400).json({ error: "Email already exists" });
     }
 
+    if (username.length < 2 || username.length > 10) {
+      return res.status(400).json({ error: "Username should be of length >2 and <10" });
+    }
+
     const salt = random();
 
     const user = await createUser({
@@ -64,7 +68,6 @@ export const login = async (req: express.Request, res: express.Response) => {
       console.log("Invalid password");
       return res.status(403).json({ error: "Invalid password" });
     }
-
     console.log("Login success!");
     res.json({ user });
   } catch (error) {
