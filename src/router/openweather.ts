@@ -50,7 +50,9 @@ export default (router: express.Router) => {
             try {
                 const weatherData = await fetchWeatherData(lat, lon);
                 const locationName = await fetchLocationName(lat, lon);
-                cache.data = cleanWeatherData(weatherData, locationName);
+                // cache.data = cleanWeatherData(weatherData, locationName);
+                // @ts-ignore
+                cache.data = {weatherData, locationName};
                 cache.timestamp = now;
             } catch (err) {
                 console.error("Error fetching weather data:", err);
