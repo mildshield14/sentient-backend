@@ -39,10 +39,14 @@ const cleanWeatherData = (data: any, location: { city: string, principalSubdivis
         }))
         // .filter((hour: any) => new Date(hour.time).getHours() > currentTime)
         .slice(0, 5);
+    
+    const country = location.principalSubdivisionCode.split("-")[0];
+    const state = location.principalSubdivisionCode.split("-")[1];
 
     return {
         location: location.city,
-        principalSubdivisionCode: location.principalSubdivisionCode,
+       country: country,
+        state: state,
         current: {
             temperature: Math.round(data.current_weather.temperature),
             weatherCode: data.current_weather.weather_code,
