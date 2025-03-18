@@ -49,7 +49,7 @@ const cleanWeatherData = (data: any, location: { city: string, principalSubdivis
         state: state,
         current: {
             temperature: Math.round(data.current_weather.temperature),
-            weatherCode: data.current_weather.weather_code,
+            weatherCode: data.current_weather.weathercode,
         },
         hourly: latestHours,
     };
