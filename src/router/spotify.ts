@@ -1,6 +1,6 @@
 import express from "express";
 import SpotifyWebApi from "spotify-web-api-node";
-import { UserModel } from "../models/User";
+import { UserModel } from "../db/users";
 
 const router = express.Router();
 
