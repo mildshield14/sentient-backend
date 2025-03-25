@@ -11,9 +11,12 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 router.post("/spotifylogin", async (req, res) => {
-  const code = req.body.code;
+  const { code, userId } = req.body;
   if (!code) {
     return res.status(400).json({ error: "Missing 'code' in request body" });
+  }
+  if (!userId) {
+    return res.status(400).json({ error: "Missing 'localUserId' in request body" });
   }
 
   try {
@@ -25,30 +28,25 @@ router.post("/spotifylogin", async (req, res) => {
     const meResponse = await tempApi.getMe();
     const spotifyId = meResponse.body.id;
 
-    let user = await UserModel.findOne({ "spotify.id": spotifyId });
-
+    let user = await UserModel.findById(userId);
     if (!user) {
-      user = new UserModel({
-        email: `spotify_${spotifyId}@example.com`,
-        spotify: {
-          id: spotifyId,
-          accessToken: access_token,
-          refreshToken: refresh_token,
-          expiresIn: expires_in,
-          tokenRetrievedAt: new Date(),
-        },
-      });
-    } else {
-      user.spotify.accessToken = access_token;
-      user.spotify.refreshToken = refresh_token;
-      user.spotify.expiresIn = expires_in;
-      user.spotify.tokenRetrievedAt = new Date();
+      return res.status(404).json({ error: "Local user not found" });
     }
+
+    user.spotify = {
+      id: spotifyId,
+      accessToken: access_token,
+      refreshToken: refresh_token,
+      expiresIn: expires_in,
+      tokenRetrievedAt: new Date(),
+    };
 
     await user.save();
 
+
     res.json({
-      userId: spotifyId,
+      userId: userId,
+      spotifyId,
       accessToken: access_token,
       refreshToken: refresh_token,
       expiresIn: expires_in,
