@@ -24,6 +24,9 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (existingUser) {
             return res.status(400).json({ error: "Email already exists" });
         }
+        if (username.length < 2 || username.length > 10) {
+            return res.status(400).json({ error: "Username should be of length >2 and <10" });
+        }
         const salt = (0, helpers_1.random)();
         const user = yield (0, users_1.createUser)({
             email,

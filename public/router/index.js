@@ -15,6 +15,7 @@ const router = express_1.default.Router();
 exports.default = () => {
     (0, authentication_1.default)(router);
     (0, users_1.default)(router);
+    // @ts-ignore
     (0, spotify_1.default)(router);
     (0, openweather_1.default)(router);
     (0, notes_1.default)(router);
