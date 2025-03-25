@@ -9,6 +9,13 @@ const userScheme = new mongoose.Schema({
         salt: { type: String, select: false },
         sessionToken: { type: String, select: false },
     },
+    spotify: {
+        id: { type: String, index: true },
+        accessToken: { type: String },
+        refreshToken: { type: String },
+        expiresIn: { type: Number },
+        tokenRetrievedAt: { type: Date, default: Date.now },
+    },
 });
 
 export const UserModel = mongoose.model("User", userScheme);
