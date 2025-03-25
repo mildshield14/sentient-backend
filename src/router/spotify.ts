@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import SpotifyWebApi from "spotify-web-api-node";
 import { UserModel } from "../db/users";
 
-const router = express.Router();
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -10,7 +9,8 @@ const spotifyApi = new SpotifyWebApi({
   redirectUri: "http://localhost:5173/callback",
 });
 
-router.post(
+export default (router:express.Router) => {
+    router.post(
     "/spotifylogin",
     async (req: Request, res: Response) => {
       const { code, userId } = req.body;
@@ -56,7 +56,5 @@ router.post(
         console.error("Error during Spotify token exchange:", error);
         return res.status(400).json({ error: "Failed to exchange code for tokens" });
       }
-    }
-);
-
-export default router;
+})
+}
