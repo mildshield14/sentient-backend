@@ -12,8 +12,7 @@ const router = express.Router();
 export default (): express.Router => {
   authentication(router);
   users(router);
-  // @ts-ignore
-  spotify(router)
+  router.use("/spotify", spotify);
   weather(router);
   notes(router);
   quotes(router);
