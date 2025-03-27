@@ -10,6 +10,51 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 export default (router:express.Router) => {
+  router.get("/recommendations", async (req: Request, res: Response) => {
+    const mood = req.query.mood as string;
+    if (!mood) {
+      return res.status(400).json({ error: "Missing mood query parameter" });
+    }
+
+    let targetValence: number;
+    switch (mood.toLowerCase()) {
+      case "happy":
+        targetValence = 0.8;
+        break;
+      case "sad":
+        targetValence = 0.3;
+        break;
+      case "energetic":
+        targetValence = 0.9;
+        break;
+      case "chill":
+        targetValence = 0.5;
+        break;
+      default:
+        targetValence = 0.5;
+    }
+
+    const seed_genres = "pop";
+
+    try {
+      // Obtain an application access token via client credentials grant
+      const tokenData = await spotifyApi.clientCredentialsGrant();
+      spotifyApi.setAccessToken(tokenData.body.access_token);
+
+      // Fetch recommendations from Spotify API
+      const recommendations = await spotifyApi.getRecommendations({
+        seed_genres,
+        target_valence: targetValence,
+        limit: 10,
+      });
+
+      return res.json(recommendations.body);
+    } catch (error) {
+      console.error("Error fetching recommendations:", error);
+      return res.status(400).json({ error: "Failed to fetch recommendations" });
+    }
+    })
+
     router.post(
     "/spotifylogin",
     async (req: Request, res: Response) => {
