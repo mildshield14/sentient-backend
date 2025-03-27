@@ -79,7 +79,7 @@ export default (router: express.Router) => {
 
             const seedGenres = ["pop", "dance", "rock"]; // Ensure these are valid seed values
             const recommendationsParams = {
-                seed_genres: seedGenresArray.join(","),
+                seed_genres: seedGenres.join(","),
                 target_valence: targetValence,
                 limit: 10,
             };
