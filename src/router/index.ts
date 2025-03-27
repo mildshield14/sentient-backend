@@ -6,6 +6,7 @@ import weather from "./openweather";
 import notes from "./notes";
 import quotes from "./quotes";
 import image from "./image";
+import recommend from "./recommendation";
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ export default (): express.Router => {
   notes(router);
   quotes(router);
   image(router);
+  recommend(router);
   return router;
 };
 
