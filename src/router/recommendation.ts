@@ -8,25 +8,19 @@ async function refreshUserToken(user: any) {
     const retrievedTime = new Date(user.spotify.tokenRetrievedAt).getTime();
     const elapsedSeconds = (now - retrievedTime) / 1000;
 
-    // If token is expired, refresh it
     if (elapsedSeconds >= user.spotify.expiresIn) {
         console.log("Token expired, refreshing...");
         const spotifyRefreshApi = new SpotifyWebApi({
             clientId: process.env.SPOTIFY_CLIENT_ID,
             clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
         });
-
         try {
-            const refreshData = await spotifyRefreshApi.refreshAccessToken(
-                user.spotify.refreshToken
-            );
+            const refreshData = await spotifyRefreshApi.refreshAccessToken(user.spotify.refreshToken);
 
-            // Update tokens
             user.spotify.accessToken = refreshData.body.access_token;
             user.spotify.expiresIn = refreshData.body.expires_in;
             user.spotify.tokenRetrievedAt = new Date();
 
-            // If Spotify returned a new refresh token, save it
             if (refreshData.body.refresh_token) {
                 user.spotify.refreshToken = refreshData.body.refresh_token;
             }
@@ -46,7 +40,7 @@ export default (router: express.Router) => {
         const mood = (req.query.mood as string) || "";
 
         if (!userId) {
-            return res.status(400).json({error: "Missing userId query parameter"});
+            return res.status(400).json({ error: "Missing userId query parameter" });
         }
 
         // Simple mood-to-valence mapping
@@ -72,7 +66,7 @@ export default (router: express.Router) => {
         try {
             const user = await UserModel.findById(userId);
             if (!user || !user.spotify) {
-                return res.status(404).json({error: "User not found or Spotify not linked"});
+                return res.status(404).json({ error: "User not found or Spotify not linked" });
             }
 
             await refreshUserToken(user);
@@ -83,12 +77,16 @@ export default (router: express.Router) => {
             });
             spotifyApi.setAccessToken(user.spotify.accessToken);
 
-            const seedGenres = ["pop", "dance", "rock"]; // TODO: need to update this
-            const recResponse = await spotifyApi.getRecommendations({
+            const seedGenres = ["pop", "dance", "rock"]; // Ensure these are valid seed values
+            const recommendationsParams = {
                 seed_genres: seedGenres,
                 target_valence: targetValence,
                 limit: 10,
-            });
+            };
+
+            console.log("Requesting recommendations with parameters:", recommendationsParams);
+
+            const recResponse = await spotifyApi.getRecommendations(recommendationsParams);
 
             return res.json(recResponse.body);
         } catch (error: any) {
@@ -96,7 +94,7 @@ export default (router: express.Router) => {
             if (error.body) {
                 console.error("Spotify API error body:", error.body);
             }
-            return res.status(400).json({error: "Failed to fetch recommendations"});
+            return res.status(400).json({ error: "Failed to fetch recommendations" });
         }
     });
 }
