@@ -34,7 +34,7 @@ export default (router:express.Router) => {
         targetValence = 0.5;
     }
 
-    const seed_genres = "pop";
+    const seed_genres = ["pop"];
 
     try {
       // Obtain an application access token via client credentials grant
