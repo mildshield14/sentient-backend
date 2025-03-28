@@ -77,7 +77,7 @@ export default (router: express.Router) => {
             });
             spotifyApi.setAccessToken(user.spotify.accessToken);
 
-            const seedGenres = ["pop", "dance", "rock"]; // Ensure these are valid seed values
+            const seedGenres = ["pop"];
             const recommendationsParams = {
                 seed_genres: seedGenres.join(","),
                 target_valence: targetValence,
