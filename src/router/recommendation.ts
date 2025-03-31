@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { UserModel } from "../db/users";
-
+import SpotifyWebApi from "spotify-web-api-node";
 
 export default (router: express.Router) => {
   router.get("/recommendations", async (req: Request, res: Response) => {
@@ -15,7 +15,26 @@ export default (router: express.Router) => {
       return res.status(404).json({error: "User or user's Spotify tokens not found"});
     }
 
-    const accessToken = user.spotify.accessToken;
+    const spotifyApi = new SpotifyWebApi({
+      clientId: process.env.SPOTIFY_CLIENT_ID,
+      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    });
+
+    // Set the stored refresh token
+    spotifyApi.setRefreshToken(user.spotify.refreshToken);
+
+    const data = await spotifyApi.refreshAccessToken();
+    const newAccessToken = data.body.access_token;
+
+    user.spotify.accessToken = newAccessToken;
+    if (data.body.refresh_token) {
+      user.spotify.refreshToken = data.body.refresh_token;
+    }
+    user.spotify.expiresIn = data.body.expires_in;
+    user.spotify.tokenRetrievedAt = new Date();
+    await user.save();
+
+
 
     // Figure out your targetValence based on the mood
     let targetValence = 0.5;
@@ -45,7 +64,7 @@ export default (router: express.Router) => {
 
     try {
       const response = await fetch(spotifyUrl.toString(), {
-        headers: {Authorization: `Bearer ${accessToken}`},
+        headers: {Authorization: `Bearer ${newAccessToken}`},
       });
       if (!response.ok) {
         const bodyText = await response.text();
