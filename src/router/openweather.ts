@@ -4,7 +4,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const cache = {
+const cache: {
+    data: ReturnType<typeof cleanWeatherData> | null,
+    timestamp: number,
+} = {
     data: null,
     timestamp: 0,
 };
