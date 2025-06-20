@@ -7,6 +7,7 @@ import notes from "./notes";
 import quotes from "./quotes";
 import image from "./image";
 import recommend from "./recommendation";
+import todos from "./todos";
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ export default (): express.Router => {
   quotes(router);
   image(router);
   recommend(router);
+  todos(router);
   return router;
 };
 
