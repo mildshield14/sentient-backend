@@ -16,6 +16,7 @@ const userScheme = new mongoose.Schema({
         expiresIn: { type: Number },
         tokenRetrievedAt: { type: Date, default: Date.now },
     },
+
 });
 
 export const UserModel = mongoose.model("User", userScheme);

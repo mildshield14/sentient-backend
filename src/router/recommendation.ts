@@ -4,15 +4,17 @@ import SpotifyWebApi from "spotify-web-api-node";
 
 export default (router: express.Router) => {
   router.get("/recommendations", async (req: Request, res: Response) => {
-    const {userId, mood = "happy"} = req.query;
+    const { userId, mood = "happy" } = req.query;
 
     if (!userId) {
-      return res.status(400).json({error: "Missing userId in query"});
+      return res.status(400).json({ error: "Missing userId in query" });
     }
 
     const user = await UserModel.findById(userId);
     if (!user || !user.spotify?.accessToken) {
-      return res.status(404).json({error: "User or user's Spotify tokens not found"});
+      return res
+          .status(404)
+          .json({ error: "User or user's Spotify tokens not found" });
     }
 
     const spotifyApi = new SpotifyWebApi({
@@ -20,7 +22,12 @@ export default (router: express.Router) => {
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
     });
 
-    // Set the stored refresh token
+    if (!user.spotify.refreshToken) {
+      return res
+          .status(400)
+          .json({ error: "User's Spotify refresh token is missing" });
+    }
+
     spotifyApi.setRefreshToken(user.spotify.refreshToken);
 
     const data = await spotifyApi.refreshAccessToken();
@@ -34,9 +41,6 @@ export default (router: express.Router) => {
     user.spotify.tokenRetrievedAt = new Date();
     await user.save();
 
-
-
-    // Figure out your targetValence based on the mood
     let targetValence = 0.5;
     switch (mood.toString().toLowerCase()) {
       case "happy":
@@ -49,13 +53,10 @@ export default (router: express.Router) => {
         targetValence = 0.9;
         break;
       case "chill":
-        targetValence = 0.5;
-        break;
       default:
         targetValence = 0.5;
     }
 
-    // Build request to Spotify's Recommendations endpoint
     const spotifyUrl = new URL("https://api.spotify.com/v1/recommendations");
     spotifyUrl.searchParams.set("seed_genres", "pop");
     spotifyUrl.searchParams.set("target_valence", targetValence.toString());
@@ -64,17 +65,17 @@ export default (router: express.Router) => {
 
     try {
       const response = await fetch(spotifyUrl.toString(), {
-        headers: {Authorization: `Bearer ${newAccessToken}`},
+        headers: { Authorization: `Bearer ${newAccessToken}` },
       });
       if (!response.ok) {
         const bodyText = await response.text();
         throw new Error(`Spotify Rec Error: ${response.status} - ${bodyText}`);
       }
       const recommendations = await response.json();
-      return res.json({recommendations});
+      return res.json({ recommendations });
     } catch (err: any) {
       console.error("Failed to fetch recommendations:", err);
-      return res.status(500).json({error: err.message});
+      return res.status(500).json({ error: err.message });
     }
   });
-}
+};
