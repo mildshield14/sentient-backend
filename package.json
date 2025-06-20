@@ -32,6 +32,11 @@
     "uuid": "^11.1.0",
     "web-vitals": "^2.1.4"
   },
+  "overrides": {
+    "@teachablemachine/image": {
+      "@tensorflow/tfjs": "^4.22.0"
+    }
+  },
   "scripts": {
     "start": "nodemon --exec ts-node -r dotenv/config ./index.ts",
     "build": "tsc -p tsconfig.json",
